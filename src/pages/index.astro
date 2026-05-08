@@ -1,0 +1,98 @@
+---
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro + GSAP</title>
+	</head>
+	<body>
+		<header>
+			<h1 id="title">Astro &times; GSAP</h1>
+			<p id="subtitle">Every plugin registered. Scroll, drag, vibe.</p>
+		</header>
+
+		<section class="panel">
+			<div class="box" data-box></div>
+			<div class="box drag" data-drag>drag me</div>
+		</section>
+
+		<section class="panel">
+			<svg viewBox="0 0 400 200" class="path-demo" aria-hidden="true">
+				<path id="motion-path" d="M20,100 C100,20 300,180 380,100" fill="none" stroke="#444" stroke-width="2" stroke-dasharray="4 4"/>
+				<circle id="planet" r="10" fill="#ff5b3d"/>
+			</svg>
+		</section>
+
+		<section class="panel tall"><p>Scroll-pinned section · ScrollTrigger working ✓</p></section>
+		<section class="panel tall end"><p>fin.</p></section>
+
+		<script>
+			import { gsap, ScrollTrigger, SplitText, Draggable, MotionPathPlugin } from "../lib/gsap.js";
+
+			// SplitText on the title
+			const split = SplitText.create("#title", { type: "chars" });
+			gsap.from(split.chars, {
+				yPercent: 100,
+				opacity: 0,
+				stagger: 0.04,
+				ease: "back.out(1.7)",
+				duration: 0.8,
+			});
+
+			gsap.from("#subtitle", { opacity: 0, y: 20, delay: 0.4, duration: 0.8 });
+
+			// Scroll-driven box
+			gsap.to("[data-box]", {
+				rotation: 360,
+				backgroundColor: "#ff5b3d",
+				scrollTrigger: {
+					trigger: "[data-box]",
+					start: "top 80%",
+					end: "bottom 20%",
+					scrub: true,
+				},
+			});
+
+			// Draggable
+			Draggable.create("[data-drag]", { type: "x,y", inertia: true, bounds: "body" });
+
+			// MotionPath
+			gsap.to("#planet", {
+				motionPath: { path: "#motion-path", align: "#motion-path", alignOrigin: [0.5, 0.5] },
+				duration: 4,
+				repeat: -1,
+				ease: "power1.inOut",
+				yoyo: true,
+			});
+
+			// Pin a section to prove ScrollTrigger is registered
+			ScrollTrigger.create({
+				trigger: ".panel.tall",
+				start: "top top",
+				end: "+=600",
+				pin: true,
+			});
+
+			console.log("GSAP", gsap.version, "· registered plugins:", gsap.config());
+		</script>
+
+		<style>
+			:root { color-scheme: dark; }
+			html, body { margin: 0; background: #0e0f12; color: #f4f4f5; font-family: ui-sans-serif, system-ui, sans-serif; }
+			header { padding: 25vh 8vw 8vh; }
+			h1 { font-size: clamp(2.5rem, 8vw, 6rem); margin: 0; letter-spacing: -0.03em; }
+			#subtitle { color: #a1a1aa; font-size: 1.1rem; }
+			.panel { min-height: 80vh; padding: 8vh 8vw; display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+			.panel.tall { min-height: 100vh; justify-content: center; }
+			.panel.end { background: #15161a; }
+			.box { width: 120px; height: 120px; background: #3b82f6; border-radius: 12px; }
+			.box.drag { display: grid; place-items: center; background: #a855f7; cursor: grab; user-select: none; }
+			.box.drag:active { cursor: grabbing; }
+			.path-demo { width: 100%; max-width: 600px; height: auto; }
+		</style>
+	</body>
+</html>
