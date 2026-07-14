@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Atomic Marker";
+  src: url("/atomic-marker.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-heading: "Atomic Marker", ui-sans-serif, system-ui, sans-serif;
+}
 
 :root {
   color-scheme: dark;
@@ -11,6 +22,16 @@ body {
   background: #000000;
   color: #f4f4f5;
   font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+nav {
+  font-family: "Atomic Marker", ui-sans-serif, system-ui, sans-serif;
 }
 
 .panel {
