@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
+import Hero from "../components/Hero/Hero.astro";
 ---
 
 <html lang="en">
@@ -12,7 +13,11 @@ import Navbar from "../components/Navbar.astro";
     <title>Astro + GSAP</title>
   </head>
   <body>
-    <Navbar />
-    hellow world
+    <header>
+      <Navbar />
+    </header>
+    <main>
+      <Hero />
+    </main>
   </body>
 </html>

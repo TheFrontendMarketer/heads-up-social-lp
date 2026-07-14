@@ -1,26 +1,62 @@
 ---
-import './Hero.css';
+
 ---
 
-<header class="hero">
-	<h1 id="title">Astro &times; GSAP</h1>
-	<p id="subtitle">Every plugin registered. Scroll, drag, move.</p>
-	<div class="hero-actions">
-		<a
-			class="hero-deploy"
-			href="https://webflow.com/dashboard/cloud/deploy?repo=https://github.com/webflow-examples/astro-gsap"
-		>
-			<img src="https://webflow.com/img/deploy-dark.svg" alt="Deploy to Webflow" />
-		</a>
-		<a class="hero-cheatsheet" href="https://gsap.com/cheatsheet/">
-			GSAP Cheatsheet <span aria-hidden="true">👀</span>
-		</a>
-		<a class="hero-cheatsheet" href="https://docs.astro.build/">
-			Astro Docs <span aria-hidden="true">🚀</span>
-		</a>
-	</div>
-</header>
+<link
+  rel="preload"
+  as="image"
+  href="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-dim.png"
+/><link
+  rel="preload"
+  as="image"
+  href="https://d22po4pjz3o32e.cloudfront.net/placeholder-image.svg"
+/><link
+  rel="preload"
+  as="image"
+  href="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape-dim.png"
+/>
+<section id="relume" class="px-[5%] py-16 md:py-24 lg:py-28">
+  <div class="container">
+    <div class="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16">
+      <div>
+        <h1 class="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">
+          Heads Up Social
+        </h1>
+        <p class="md:text-md pb-6">
+          I got tired of missing platform updates. So I built a way to never
+          miss one again.
+        </p>
+
+        <a href="" class="bg-[#E63946] text-white px-4 py-2 rounded-md"
+          >Subscribe for FREE</a
+        >
+      </div>
+      <div class="relative flex w-full">
+        <div class="absolute bottom-[10%] left-0 w-[35%]">
+          <img
+            src="https://res.cloudinary.com/dhytwf10i/image/upload/v1784023794/code_pz4n4k.png"
+            class="aspect-square size-full object-cover"
+            alt="Relume placeholder image 1"
+          />
+        </div>
+        <div class="mx-[10%] w-full">
+          <img
+            src="https://res.cloudinary.com/dhytwf10i/image/upload/v1784023953/site2_b3egh7.png"
+            alt="Hero image"
+          />
+        </div>
+        <div class="absolute right-0 top-[10%] w-2/5">
+          <img
+            src="https://res.cloudinary.com/dhytwf10i/image/upload/v1784023794/gitlabrepo_ryvc6v.png"
+            class="aspect-[3/2] size-full object-cover"
+            alt="Relume placeholder image 3"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
-	import './Hero.js';
+  import "./Hero.js";
 </script>
