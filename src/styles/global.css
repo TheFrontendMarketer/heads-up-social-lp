@@ -51,3 +51,8 @@ nav {
 .panel.end {
   background: #15161a;
 }
+
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}

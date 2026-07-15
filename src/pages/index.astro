@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 import Hero from "../components/Hero/Hero.astro";
-import Issue from "../components/issue.astro";
+import Issue from "../components/Issue.astro";
 import About from "../components/About.astro";
 ---
 
@@ -19,7 +19,11 @@ import About from "../components/About.astro";
     />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro + GSAP</title>
+    <meta
+      name="description"
+      content="Heads Up Social is a tool to help you stay informed about social media updates, news, and how it impacts your marketing strategy."
+    />
+    <title>Heads Up Social</title>
   </head>
   <body>
     <header>

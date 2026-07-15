@@ -1,6 +1,9 @@
 import { gsap, SplitText } from "../../lib/gsap.js";
 
-const split = SplitText.create("#title", { type: "words,chars" });
+const split = SplitText.create("#title", {
+  type: "words,chars",
+  wordsClass: "split-word",
+});
 
 gsap.from(split.chars, {
   yPercent: 100,
