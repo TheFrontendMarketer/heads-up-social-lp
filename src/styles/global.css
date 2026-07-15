@@ -8,10 +8,6 @@
   font-display: swap;
 }
 
-@theme {
-  --font-heading: "Atomic Marker", ui-sans-serif, system-ui, sans-serif;
-}
-
 :root {
   color-scheme: dark;
 }
@@ -22,6 +18,7 @@ body {
   background: #000000;
   color: #f4f4f5;
   font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
 }
 
 h1,
@@ -32,6 +29,37 @@ h5,
 h6,
 nav {
   font-family: "Atomic Marker", ui-sans-serif, system-ui, sans-serif;
+}
+
+h2:not(.content-title) {
+  font-size: 2.25rem; /* text-4xl */
+  line-height: 1.2;
+  font-weight: bold;
+}
+
+h3 {
+  margin-bottom: 1.25rem; /* mb-5 */
+  color: #ffffff;
+  font-size: 1.25rem; /* text-xl */
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  h2:not(.content-title) {
+    font-size: 3rem; /* md:text-5xl */
+  }
+
+  h3 {
+    margin-bottom: 1.5rem; /* md:mb-6 */
+    font-size: 1.5rem; /* md:text-2xl */
+    line-height: 1.4;
+  }
+}
+
+@media (min-width: 1024px) {
+  h2:not(.content-title) {
+    font-size: 3.75rem; /* lg:text-6xl */
+  }
 }
 
 .panel {
@@ -55,4 +83,8 @@ nav {
 .split-word {
   display: inline-block;
   white-space: nowrap;
+}
+
+.content-title {
+  font-family: "Atomic Marker", ui-sans-serif, system-ui, sans-serif;
 }
