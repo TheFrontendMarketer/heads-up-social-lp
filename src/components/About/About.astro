@@ -1,4 +1,6 @@
 ---
+import "./About.css";
+
 const features = [
   {
     title: "Here's the thing",
@@ -18,10 +20,19 @@ const features = [
 ];
 ---
 
-<section class="relative px-[5%] py-16 md:py-24 lg:py-28">
+<section id="about" class="relative px-[5%] py-16 md:py-24 lg:py-28">
   <div class="relative z-10 mx-auto max-w-7xl">
-    <div class="mx-auto mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
-      <h2 class="mb-5 text-white md:mb-6">
+    <div
+      class="relative mx-auto mb-12 max-w-lg overflow-visible pt-8 text-center md:mb-18 lg:mb-20"
+      data-about-heading
+    >
+      <div
+        class="about-hearts-stage pointer-events-none absolute inset-x-0 bottom-0 h-28"
+        data-about-hearts-stage
+        aria-hidden="true"
+      >
+      </div>
+      <h2 class="relative z-10 mb-5 text-white md:mb-6">
         Use mine or build your own
       </h2>
     </div>
@@ -52,3 +63,7 @@ const features = [
     <div class="absolute inset-0 bg-black/50"></div>
   </div>
 </section>
+
+<script>
+  import "./About.js";
+</script>
