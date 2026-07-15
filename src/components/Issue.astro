@@ -12,7 +12,7 @@ Your attention shouldn't be.",
   },
 ];
 
-type Platform = "youtube" | "linkedin" | "instagram";
+type Platform = "YouTube" | "LinkedIn" | "Instagram";
 
 interface Entry {
   platform: Platform;
@@ -21,20 +21,20 @@ interface Entry {
 
 const entries: Entry[] = [
   {
-    platform: "youtube",
+    platform: "YouTube",
     text: "Shorts shelf life cut from 14 days to 5 in the algorithm",
   },
   {
-    platform: "linkedin",
+    platform: "LinkedIn",
     text: "Carousel posts now capped at 2x reach vs. native video",
   },
   {
-    platform: "instagram",
+    platform: "Instagram",
     text: "Reels now indexed by Google Search by default",
   },
 ];
 
-const label = "platforms.changelog";
+const label = "changelog";
 ---
 
 <section class="px-[5%] py-16 md:py-24 lg:py-28">
@@ -62,9 +62,9 @@ const label = "platforms.changelog";
           class="flex items-center justify-between border-b border-zinc-800 px-4 py-3"
         >
           <div class="flex items-center gap-2">
-            <span class="size-2.5 rounded-full bg-red-900/40"></span>
-            <span class="size-2.5 rounded-full bg-amber-900/40"></span>
-            <span class="size-2.5 rounded-full bg-emerald-900/40"></span>
+            <span class="size-2.5 rounded-full bg-[#FF605C]"></span>
+            <span class="size-2.5 rounded-full bg-[#FFBD44]"></span>
+            <span class="size-2.5 rounded-full bg-[#00CA4E]"></span>
           </div>
           <span class="text-xs text-zinc-500">{label}</span>
         </div>
@@ -74,7 +74,7 @@ const label = "platforms.changelog";
             entries.map((entry, i) => (
               <li class="flex items-start gap-3 px-4 py-3 leading-relaxed">
                 <span class="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center">
-                  {entry.platform === "youtube" && (
+                  {entry.platform === "YouTube" && (
                     <img
                       src="/yt-icon.svg"
                       alt=""
@@ -82,7 +82,7 @@ const label = "platforms.changelog";
                       aria-hidden="true"
                     />
                   )}
-                  {entry.platform === "linkedin" && (
+                  {entry.platform === "LinkedIn" && (
                     <img
                       src="/li-icon.svg"
                       alt=""
@@ -90,7 +90,7 @@ const label = "platforms.changelog";
                       aria-hidden="true"
                     />
                   )}
-                  {entry.platform === "instagram" && (
+                  {entry.platform === "Instagram" && (
                     <img
                       src="/ig-icon.svg"
                       alt=""
