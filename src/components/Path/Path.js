@@ -11,8 +11,10 @@ const handle = document.querySelector("[data-path-handle]");
 
 const SAMPLE_COUNT = 240;
 const COMMIT_THRESHOLD = 0.6;
-const desktopQuery = window.matchMedia("(min-width: 768px)");
-const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const desktopQuery = window.matchMedia("(min-width: 959px)");
+const reducedMotionQuery = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+);
 
 let isInteractive = false;
 let isDragging = false;
@@ -88,7 +90,7 @@ function selectOption(choice) {
   clearSelectedOptions();
 
   const selected = options.find(
-    (option) => option.dataset.pathChoice === choice
+    (option) => option.dataset.pathChoice === choice,
   );
 
   if (!selected) return;
@@ -97,7 +99,7 @@ function selectOption(choice) {
   gsap.fromTo(
     selected,
     { y: 0 },
-    { y: -6, duration: 0.25, ease: "power2.out", overwrite: true }
+    { y: -6, duration: 0.25, ease: "power2.out", overwrite: true },
   );
 }
 
@@ -125,7 +127,7 @@ function resolveChoice() {
 
   if (currentProgress >= COMMIT_THRESHOLD) {
     snapAlongBranch(branch, currentProgress, 1, () =>
-      selectOption(branch.choice)
+      selectOption(branch.choice),
     );
   } else {
     snapAlongBranch(branch, currentProgress, 0, clearSelectedOptions);
@@ -283,7 +285,7 @@ function setupDesktopFork() {
         ease: "power2.out",
         stagger: 0.08,
       },
-      "-=0.15"
+      "-=0.15",
     )
     .to(
       dots,
@@ -293,7 +295,7 @@ function setupDesktopFork() {
         ease: "back.out(2)",
         stagger: 0.08,
       },
-      "-=0.35"
+      "-=0.35",
     )
     .to(
       handle,
@@ -302,7 +304,7 @@ function setupDesktopFork() {
         duration: 0.35,
         ease: "back.out(2)",
       },
-      "-=0.25"
+      "-=0.25",
     )
     .add(() => {
       isInteractive = true;
