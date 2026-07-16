@@ -10,14 +10,20 @@ const dots = gsap.utils.toArray("[data-path-dot]");
 const handle = document.querySelector("[data-path-handle]");
 
 const SAMPLE_COUNT = 240;
-// Progress past this (0-1 along a branch) counts as committing to that option.
 const COMMIT_THRESHOLD = 0.6;
+const desktopQuery = window.matchMedia("(min-width: 768px)");
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let isInteractive = false;
 let isDragging = false;
 let branches = null;
 let activeBranch = "left";
 let currentProgress = 0;
+let desktopReady = false;
+
+function isDesktop() {
+  return desktopQuery.matches;
+}
 
 function buildBranch(pathEl, choice) {
   const total = pathEl.getTotalLength();
@@ -95,7 +101,6 @@ function selectOption(choice) {
   );
 }
 
-// Animate the handle along its branch to a target progress (0 = split, 1 = endpoint).
 function snapAlongBranch(branch, fromProgress, toProgress, onComplete) {
   const proxy = { p: fromProgress };
 
@@ -119,14 +124,29 @@ function resolveChoice() {
   const branch = branches[activeBranch];
 
   if (currentProgress >= COMMIT_THRESHOLD) {
-    snapAlongBranch(branch, currentProgress, 1, () => selectOption(branch.choice));
+    snapAlongBranch(branch, currentProgress, 1, () =>
+      selectOption(branch.choice)
+    );
   } else {
     snapAlongBranch(branch, currentProgress, 0, clearSelectedOptions);
   }
 }
 
+function moveHeartToChoice(choice) {
+  if (!branches || !isDesktop()) return;
+
+  const branchKey = choice === "subscribe" ? "left" : "right";
+  const branch = branches[branchKey];
+  if (!branch) return;
+
+  activeBranch = branchKey;
+  snapAlongBranch(branch, currentProgress, 1, () => {
+    selectOption(choice);
+  });
+}
+
 function onPointerMove(event) {
-  if (!isDragging || !isInteractive || !branches) return;
+  if (!isDragging || !isInteractive || !branches || !isDesktop()) return;
 
   const point = getSvgPoint(event);
   if (!point) return;
@@ -154,7 +174,7 @@ function onPointerUp() {
 }
 
 function onPointerDown(event) {
-  if (!isInteractive) return;
+  if (!isInteractive || !isDesktop()) return;
 
   isDragging = true;
   event.preventDefault();
@@ -162,15 +182,72 @@ function onPointerDown(event) {
   window.addEventListener("pointerup", onPointerUp);
 }
 
-if (
-  section &&
-  svg &&
-  stem &&
-  left &&
-  right &&
-  handle &&
-  !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-) {
+function onOptionActivate(choice) {
+  selectOption(choice);
+
+  // On desktop, also send the heart to that endpoint when the card is tapped.
+  if (isDesktop() && branches && isInteractive) {
+    moveHeartToChoice(choice);
+  }
+}
+
+function setupCardTaps() {
+  options.forEach((option) => {
+    const choice = option.dataset.pathChoice;
+    if (!choice) return;
+
+    option.addEventListener("click", (event) => {
+      event.preventDefault();
+      onOptionActivate(choice);
+    });
+
+    option.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onOptionActivate(choice);
+      }
+    });
+  });
+}
+
+function animateCardsIn() {
+  if (reducedMotionQuery.matches) {
+    gsap.set(options, { opacity: 1, y: 0 });
+    return;
+  }
+
+  gsap.set(options, { opacity: 0, y: 28 });
+
+  gsap.to(options, {
+    opacity: 1,
+    y: 0,
+    duration: 0.65,
+    ease: "power2.out",
+    stagger: 0.12,
+    scrollTrigger: {
+      trigger: section,
+      start: "top 70%",
+      once: true,
+    },
+  });
+}
+
+function setupDesktopFork() {
+  if (
+    !svg ||
+    !stem ||
+    !left ||
+    !right ||
+    !handle ||
+    reducedMotionQuery.matches ||
+    desktopReady
+  ) {
+    return;
+  }
+
+  // Fork is display:none on mobile — only sample paths once it's visible.
+  if (!isDesktop()) return;
+
   branches = {
     left: buildBranch(left, "subscribe"),
     right: buildBranch(right, "build"),
@@ -178,7 +255,6 @@ if (
 
   gsap.set([stem, left, right], { drawSVG: "0%" });
   gsap.set(dots, { scale: 0, transformOrigin: "50% 50%" });
-  gsap.set(options, { opacity: 0, y: 28 });
   gsap.set(handle, {
     x: branches.left.samples[0].x,
     y: branches.left.samples[0].y,
@@ -228,20 +304,30 @@ if (
       },
       "-=0.25"
     )
-    .to(
-      options,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.65,
-        ease: "power2.out",
-        stagger: 0.12,
-        onComplete: () => {
-          isInteractive = true;
-        },
-      },
-      "-=0.2"
-    );
+    .add(() => {
+      isInteractive = true;
+    });
 
   handle.addEventListener("pointerdown", onPointerDown);
+  desktopReady = true;
+}
+
+if (section && options.length) {
+  setupCardTaps();
+
+  // Cards animate in on both breakpoints.
+  animateCardsIn();
+
+  // Desktop fork only when the layout is wide enough for side-by-side cards.
+  if (isDesktop()) {
+    setupDesktopFork();
+  }
+
+  // If the user rotates/resizes into desktop, wire the fork once.
+  desktopQuery.addEventListener("change", (event) => {
+    if (event.matches) {
+      setupDesktopFork();
+      ScrollTrigger.refresh();
+    }
+  });
 }

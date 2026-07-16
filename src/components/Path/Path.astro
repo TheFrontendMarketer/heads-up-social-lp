@@ -9,12 +9,15 @@ import "./Path.css";
         <h2 class="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
           Choose your path
         </h2>
-        <p>Move your heart along the path that feels right for you!</p>
+        <p class="md:hidden">Tap the path that feels right for you.</p>
+        <p class="hidden md:block">
+          Move your heart along the path that feels right for you!
+        </p>
       </div>
     </div>
 
-    <!-- Mock: animated fork with draggable decision point -->
-    <div class="mb-10 flex justify-center md:mb-12">
+    <!-- Desktop only: animated fork with draggable heart -->
+    <div class="mb-10 hidden justify-center md:mb-12 md:flex" data-path-fork>
       <svg
         class="path-fork"
         data-path-svg
@@ -22,7 +25,6 @@ import "./Path.css";
         xmlns="http://www.w3.org/2000/svg"
       >
         <path class="path-fork__line" data-path-stem d="M320 0 L320 88"></path>
-        <!-- endpoints nudged to visual card centers with softer lower tails -->
         <path
           class="path-fork__line"
           data-path-left
@@ -49,32 +51,36 @@ import "./Path.css";
       class="mx-auto grid max-w-5xl grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-x-12"
     >
       <div
-        class="path-option flex size-full flex-col items-center justify-start text-center"
+        class="path-option flex size-full cursor-pointer flex-col items-center justify-start text-center"
         data-path-option
         data-path-choice="subscribe"
+        role="button"
+        tabindex="0"
       >
-        <a href="#" class="mb-6 w-full"
-          ><img
+        <div class="mb-6 w-full">
+          <img
             src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
-            alt="Relume placeholder image"
+            alt="Subscribe option"
             class="aspect-video size-full object-cover"
-          /></a
-        >
+          />
+        </div>
         <h3 class="text-xl font-bold md:text-2xl">Subscribe</h3>
         <p class="mt-2 text-zinc-300">Get the weekly briefing — no setup.</p>
       </div>
       <div
-        class="path-option flex size-full flex-col items-center justify-start text-center"
+        class="path-option flex size-full cursor-pointer flex-col items-center justify-start text-center"
         data-path-option
         data-path-choice="build"
+        role="button"
+        tabindex="0"
       >
-        <a href="#" class="mb-6 w-full"
-          ><img
+        <div class="mb-6 w-full">
+          <img
             src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
-            alt="Relume placeholder image"
+            alt="Build your own option"
             class="aspect-video size-full object-cover"
-          /></a
-        >
+          />
+        </div>
         <h3 class="text-xl font-bold md:text-2xl">Build your own</h3>
         <p class="mt-2 text-zinc-300">Fork the code and customize it.</p>
       </div>

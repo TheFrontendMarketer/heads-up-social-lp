@@ -38,10 +38,21 @@
     background-color 220ms ease;
 }
 
+.path-option:focus-visible {
+  outline: 2px solid #e63946;
+  outline-offset: 6px;
+}
+
 .path-option.is-selected {
   transform: translateY(-6px);
 }
 
 .path-option.is-selected img {
   box-shadow: 0 0 0 2px #e63946;
+}
+
+@media (max-width: 767px) {
+  .path-option:active {
+    transform: scale(0.985);
+  }
 }
