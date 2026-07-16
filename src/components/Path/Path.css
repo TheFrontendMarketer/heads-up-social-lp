@@ -1,0 +1,47 @@
+.path-fork {
+  display: block;
+  width: min(100%, 64rem); /* match max-w-5xl card grid */
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.path-fork__line {
+  fill: none;
+  stroke: #e63946;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.path-fork__dot {
+  fill: #e63946;
+}
+
+.path-fork__handle {
+  fill: #e63946;
+  cursor: grab;
+  filter: drop-shadow(0 0 10px rgba(230, 57, 70, 0.35));
+  transition: filter 180ms ease;
+}
+
+.path-fork__handle:active {
+  cursor: grabbing;
+}
+
+.path-option {
+  will-change: transform, opacity;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.path-option.is-selected {
+  transform: translateY(-6px);
+}
+
+.path-option.is-selected img {
+  box-shadow: 0 0 0 2px #e63946;
+}

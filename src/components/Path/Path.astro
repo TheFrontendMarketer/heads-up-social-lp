@@ -1,0 +1,87 @@
+---
+import "./Path.css";
+---
+
+<section id="path" class="px-[5%] py-16 md:py-24 lg:py-28" data-path-section>
+  <div class="mx-auto max-w-7xl">
+    <div class="mb-4 md:mb-6">
+      <div class="mx-auto w-full max-w-lg text-center">
+        <h2 class="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
+          Choose your path
+        </h2>
+        <p>Move your heart along the path that feels right for you!</p>
+      </div>
+    </div>
+
+    <!-- Mock: animated fork with draggable decision point -->
+    <div class="mb-10 flex justify-center md:mb-12">
+      <svg
+        class="path-fork"
+        data-path-svg
+        viewBox="0 0 640 272"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path class="path-fork__line" data-path-stem d="M320 0 L320 88"></path>
+        <!-- endpoints nudged to visual card centers with softer lower tails -->
+        <path
+          class="path-fork__line"
+          data-path-left
+          d="M320 88 C320 118, 282 134, 244 148 C206 162, 172 178, 158 196 C148 210, 146 228, 148 246"
+        ></path>
+        <path
+          class="path-fork__line"
+          data-path-right
+          d="M320 88 C320 118, 358 134, 396 148 C434 162, 468 178, 482 196 C492 210, 494 228, 492 246"
+        ></path>
+        <circle class="path-fork__dot" data-path-dot cx="148" cy="246" r="3"
+        ></circle>
+        <circle class="path-fork__dot" data-path-dot cx="492" cy="246" r="3"
+        ></circle>
+        <g class="path-fork__handle" data-path-handle>
+          <path
+            d="M12 21 C12 21 3 13.8 3 8.4 C3 5.4 5.4 3 8.4 3 C10.3 3 11.5 4.2 12 5 C12.5 4.2 13.7 3 15.6 3 C18.6 3 21 5.4 21 8.4 C21 13.8 12 21 12 21 Z"
+            transform="scale(1.35) translate(-12 -12)"></path>
+        </g>
+      </svg>
+    </div>
+
+    <div
+      class="mx-auto grid max-w-5xl grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-x-12"
+    >
+      <div
+        class="path-option flex size-full flex-col items-center justify-start text-center"
+        data-path-option
+        data-path-choice="subscribe"
+      >
+        <a href="#" class="mb-6 w-full"
+          ><img
+            src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
+            alt="Relume placeholder image"
+            class="aspect-video size-full object-cover"
+          /></a
+        >
+        <h3 class="text-xl font-bold md:text-2xl">Subscribe</h3>
+        <p class="mt-2 text-zinc-300">Get the weekly briefing — no setup.</p>
+      </div>
+      <div
+        class="path-option flex size-full flex-col items-center justify-start text-center"
+        data-path-option
+        data-path-choice="build"
+      >
+        <a href="#" class="mb-6 w-full"
+          ><img
+            src="https://d22po4pjz3o32e.cloudfront.net/placeholder-image-landscape.svg"
+            alt="Relume placeholder image"
+            class="aspect-video size-full object-cover"
+          /></a
+        >
+        <h3 class="text-xl font-bold md:text-2xl">Build your own</h3>
+        <p class="mt-2 text-zinc-300">Fork the code and customize it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import "./Path.js";
+</script>
