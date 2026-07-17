@@ -23,6 +23,7 @@
   cursor: grab;
   filter: drop-shadow(0 0 10px rgba(230, 57, 70, 0.35));
   transition: filter 180ms ease;
+  opacity: 0; /* hidden until GSAP positions it — prevents 0,0 flash on load */
 }
 
 .path-fork__handle:active {
@@ -30,10 +31,11 @@
 }
 
 .path-choices {
+  position: relative;
   border: 1px solid #27272a; /* zinc-800 */
   background: #09090b; /* zinc-950 */
   box-shadow: 8px 8px 0 0 #18181b; /* zinc-900 hard shadow, matches Issue */
-  overflow: hidden;
+  overflow: visible;
 }
 
 .path-option {
@@ -114,6 +116,25 @@
 
 .path-option.is-selected .path-option__title {
   color: #e63946;
+}
+
+.path-option.is-dissolving {
+  pointer-events: none;
+}
+
+.path-dust-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.path-dust-particle {
+  position: absolute;
+  display: block;
+  background: #f4a261;
+  will-change: transform, opacity;
 }
 
 @media (max-width: 958px) {

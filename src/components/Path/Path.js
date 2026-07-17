@@ -10,7 +10,8 @@ const dots = gsap.utils.toArray("[data-path-dot]");
 const handle = document.querySelector("[data-path-handle]");
 
 const SAMPLE_COUNT = 240;
-const COMMIT_THRESHOLD = 0.6;
+const COMMIT_THRESHOLD = 0.98;
+const DUST_PARTICLE_COUNT = 120;
 const desktopQuery = window.matchMedia("(min-width: 959px)");
 const reducedMotionQuery = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
@@ -22,6 +23,9 @@ let branches = null;
 let activeBranch = "left";
 let currentProgress = 0;
 let desktopReady = false;
+let committedChoice = null;
+let dustTimeline = null;
+let dustLayer = null;
 
 function isDesktop() {
   return desktopQuery.matches;
@@ -103,6 +107,129 @@ function selectOption(choice) {
   );
 }
 
+function clearDustEffect() {
+  dustTimeline?.kill();
+  dustTimeline = null;
+  dustLayer?.remove();
+  dustLayer = null;
+
+  options.forEach((option) => {
+    option.classList.remove("is-dissolving");
+    gsap.set(option, {
+      clearProps: "opacity,visibility,x,filter",
+    });
+  });
+}
+
+function createDustParticle(rect, exitDirection) {
+  const particle = document.createElement("span");
+  const size = gsap.utils.random(2, 8, 1);
+  // Start closer to the winning card, then drift away from it.
+  const innerBias =
+    exitDirection < 0
+      ? 1 - Math.pow(Math.random(), 2.2)
+      : Math.pow(Math.random(), 2.2);
+  const localX = innerBias * rect.width;
+  const localY = Math.random() * rect.height;
+  const colors = ["#F4A261", "#e8924f", "#f0b07a", "#d98942", "#ffc896"];
+
+  particle.className = "path-dust-particle";
+  particle.style.left = `${rect.left + localX}px`;
+  particle.style.top = `${rect.top + localY}px`;
+  particle.style.width = `${size}px`;
+  particle.style.height = `${gsap.utils.random(2, 7, 1)}px`;
+  particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+  particle.style.opacity = "0";
+
+  const edgeProgress =
+    exitDirection < 0 ? 1 - localX / rect.width : localX / rect.width;
+
+  return { particle, edgeProgress };
+}
+
+function dissolveLosingCard(winningChoice) {
+  if (!isDesktop() || committedChoice === winningChoice) return;
+
+  clearDustEffect();
+  committedChoice = winningChoice;
+
+  const losingCard = options.find(
+    (option) => option.dataset.pathChoice !== winningChoice,
+  );
+  if (!losingCard) return;
+
+  const rect = losingCard.getBoundingClientRect();
+  // Negative = exit left, positive = exit right (away from center).
+  const exitDirection = losingCard === options[0] ? -1 : 1;
+
+  dustLayer = document.createElement("div");
+  dustLayer.className = "path-dust-layer";
+  dustLayer.setAttribute("aria-hidden", "true");
+  document.body.appendChild(dustLayer);
+  losingCard.classList.add("is-dissolving");
+
+  const fragments = Array.from({ length: DUST_PARTICLE_COUNT }, () =>
+    createDustParticle(rect, exitDirection),
+  );
+  fragments.forEach(({ particle }) => dustLayer.appendChild(particle));
+
+  dustTimeline = gsap.timeline({
+    onComplete: () => {
+      gsap.set(losingCard, { visibility: "hidden" });
+      dustLayer?.remove();
+      dustLayer = null;
+      dustTimeline = null;
+    },
+  });
+
+  if (reducedMotionQuery.matches) {
+    dustTimeline.to(losingCard, { opacity: 0, duration: 0.3 });
+    return;
+  }
+
+  dustTimeline.to(losingCard, {
+    opacity: 0,
+    x: exitDirection * 48,
+    filter: "blur(3px)",
+    duration: 1.25,
+    ease: "power2.out",
+  });
+
+  fragments.forEach(({ particle, edgeProgress }) => {
+    const delay = edgeProgress * 0.72 + Math.random() * 0.18;
+
+    dustTimeline.fromTo(
+      particle,
+      {
+        x: 0,
+        y: 0,
+        opacity: 0,
+        scale: gsap.utils.random(0.4, 0.9),
+        rotation: gsap.utils.random(-30, 30),
+      },
+      {
+        x: exitDirection * gsap.utils.random(70, 180),
+        y: gsap.utils.random(15, 70),
+        opacity: 0,
+        scale: gsap.utils.random(0.1, 0.55),
+        rotation: gsap.utils.random(-180, 180),
+        duration: gsap.utils.random(0.65, 1.3),
+        ease: "power1.out",
+        keyframes: [
+          { opacity: 0.9, duration: 0.08 },
+          { opacity: 0, duration: 0.92 },
+        ],
+      },
+      delay,
+    );
+  });
+}
+
+function commitChoice(choice) {
+  selectOption(choice);
+  dissolveLosingCard(choice);
+}
+
 function snapAlongBranch(branch, fromProgress, toProgress, onComplete) {
   const proxy = { p: fromProgress };
 
@@ -127,7 +254,7 @@ function resolveChoice() {
 
   if (currentProgress >= COMMIT_THRESHOLD) {
     snapAlongBranch(branch, currentProgress, 1, () =>
-      selectOption(branch.choice),
+      commitChoice(branch.choice),
     );
   } else {
     snapAlongBranch(branch, currentProgress, 0, clearSelectedOptions);
@@ -143,7 +270,7 @@ function moveHeartToChoice(choice) {
 
   activeBranch = branchKey;
   snapAlongBranch(branch, currentProgress, 1, () => {
-    selectOption(choice);
+    commitChoice(choice);
   });
 }
 
@@ -255,12 +382,15 @@ function setupDesktopFork() {
     right: buildBranch(right, "build"),
   };
 
+  const forkStart = left.getPointAtLength(0);
+
   gsap.set([stem, left, right], { drawSVG: "0%" });
   gsap.set(dots, { scale: 0, transformOrigin: "50% 50%" });
   gsap.set(handle, {
-    x: branches.left.samples[0].x,
-    y: branches.left.samples[0].y,
+    x: forkStart.x,
+    y: forkStart.y,
     scale: 0,
+    opacity: 0,
     transformOrigin: "50% 50%",
   });
 
@@ -301,6 +431,7 @@ function setupDesktopFork() {
       handle,
       {
         scale: 1,
+        opacity: 1,
         duration: 0.35,
         ease: "back.out(2)",
       },
