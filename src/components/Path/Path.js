@@ -87,7 +87,10 @@ function getSvgPoint(event) {
 }
 
 function clearSelectedOptions() {
-  options.forEach((option) => option.classList.remove("is-selected"));
+  options.forEach((option) => {
+    option.classList.remove("is-selected", "is-winner");
+    gsap.set(option, { x: 0, y: 0 });
+  });
 }
 
 function selectOption(choice) {
@@ -100,11 +103,25 @@ function selectOption(choice) {
   if (!selected) return;
 
   selected.classList.add("is-selected");
-  gsap.fromTo(
-    selected,
-    { y: 0 },
-    { y: -6, duration: 0.25, ease: "power2.out", overwrite: true },
+}
+
+function lockWinningCard(winningChoice) {
+  const winningCard = options.find(
+    (option) => option.dataset.pathChoice === winningChoice,
   );
+  if (!winningCard) return;
+
+  gsap.killTweensOf(winningCard);
+  winningCard.classList.add("is-winner");
+  gsap.set(winningCard, { x: 0, y: 0, opacity: 1, clearProps: "filter" });
+}
+
+function getLosingForkElements(winningChoice) {
+  if (winningChoice === "subscribe") {
+    return { branch: right, dot: dots[1] };
+  }
+
+  return { branch: left, dot: dots[0] };
 }
 
 function clearDustEffect() {
@@ -114,11 +131,13 @@ function clearDustEffect() {
   dustLayer = null;
 
   options.forEach((option) => {
-    option.classList.remove("is-dissolving");
-    gsap.set(option, {
-      clearProps: "opacity,visibility,x,filter",
-    });
+    option.classList.remove("is-dissolving", "is-winner");
+    gsap.set(option, { clearProps: "opacity,visibility,x,filter" });
   });
+
+  if (left && right) {
+    gsap.set([left, right, ...dots], { clearProps: "opacity,visibility" });
+  }
 }
 
 function createDustParticle(rect, exitDirection) {
@@ -158,6 +177,12 @@ function dissolveLosingCard(winningChoice) {
   );
   if (!losingCard) return;
 
+  lockWinningCard(winningChoice);
+
+  const { branch: losingBranch, dot: losingDot } =
+    getLosingForkElements(winningChoice);
+  const losingForkTargets = [losingBranch, losingDot].filter(Boolean);
+
   const rect = losingCard.getBoundingClientRect();
   // Negative = exit left, positive = exit right (away from center).
   const exitDirection = losingCard === options[0] ? -1 : 1;
@@ -176,6 +201,9 @@ function dissolveLosingCard(winningChoice) {
   dustTimeline = gsap.timeline({
     onComplete: () => {
       gsap.set(losingCard, { visibility: "hidden" });
+      if (losingForkTargets.length) {
+        gsap.set(losingForkTargets, { visibility: "hidden" });
+      }
       dustLayer?.remove();
       dustLayer = null;
       dustTimeline = null;
@@ -184,6 +212,9 @@ function dissolveLosingCard(winningChoice) {
 
   if (reducedMotionQuery.matches) {
     dustTimeline.to(losingCard, { opacity: 0, duration: 0.3 });
+    if (losingForkTargets.length) {
+      dustTimeline.to(losingForkTargets, { opacity: 0, duration: 0.3 }, 0);
+    }
     return;
   }
 
@@ -194,6 +225,18 @@ function dissolveLosingCard(winningChoice) {
     duration: 1.25,
     ease: "power2.out",
   });
+
+  if (losingForkTargets.length) {
+    dustTimeline.to(
+      losingForkTargets,
+      {
+        opacity: 0,
+        duration: 1.25,
+        ease: "power2.out",
+      },
+      0,
+    );
+  }
 
   fragments.forEach(({ particle, edgeProgress }) => {
     const delay = edgeProgress * 0.72 + Math.random() * 0.18;

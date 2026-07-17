@@ -32,10 +32,6 @@
 
 .path-choices {
   position: relative;
-  border: 1px solid #27272a; /* zinc-800 */
-  background: #09090b; /* zinc-950 */
-  box-shadow: 8px 8px 0 0 #18181b; /* zinc-900 hard shadow, matches Issue */
-  overflow: visible;
 }
 
 .path-option {
@@ -48,15 +44,13 @@
   padding: 2.5rem 1.75rem;
   text-align: center;
   cursor: pointer;
+  border: 1px solid #27272a; /* zinc-800 */
+  background: #09090b; /* zinc-950 */
+  box-shadow: 8px 8px 0 0 #18181b; /* zinc-900 hard shadow, matches Issue */
   will-change: transform, opacity;
   transition:
     background-color 220ms ease,
-    transform 220ms ease,
     box-shadow 220ms ease;
-}
-
-.path-option + .path-option {
-  border-top: 1px solid #52525b; /* zinc-600 — clear stacked divider */
 }
 
 @media (min-width: 959px) {
@@ -66,8 +60,7 @@
   }
 
   .path-option + .path-option {
-    border-top: 0;
-    border-left: 1px solid #3f3f46; /* vertical divider */
+    margin-left: -1px; /* shared edge between side-by-side cards */
   }
 }
 
@@ -118,8 +111,13 @@
   color: #e63946;
 }
 
+.path-option.is-winner {
+  pointer-events: none;
+}
+
 .path-option.is-dissolving {
   pointer-events: none;
+  z-index: 1;
 }
 
 .path-dust-layer {
