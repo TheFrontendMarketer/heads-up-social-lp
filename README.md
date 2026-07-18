@@ -1,3 +1,9 @@
+<img width="200" height="200" alt="Image" src="https://github.com/user-attachments/assets/4f565c96-333c-4c85-b64d-4bad06d390f6" />
+
+This is my take on the Webflow and GSAP Hackathon challenge. Below is the official README from their repo. Hope ya'll like it! 
+
+
+
 # GSAP, Astro & Webflow Cloud
 
 Astro app template with [GSAP](https://gsap.com/) loaded and ready to use, set up for Webflow Cloud. All GSAP plugins — including the formerly premium Club GSAP plugins, which are now 100% free for everyone (including commercial use) thanks to Webflow — are registered and available. Just import what you need from `src/lib/gsap.js`.
