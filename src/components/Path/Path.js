@@ -48,6 +48,8 @@ let dustTimeline = null;
 let zoomTimeline = null;
 let dustLayer = null;
 let zoomLayer = null;
+let gitlabPeekTween = null;
+let gitlabPeekDelay = null;
 
 function isDesktop() {
   return desktopQuery.matches;
@@ -183,6 +185,111 @@ function removeZoomLayer() {
   zoomLayer = null;
 }
 
+function stopGitlabPeek() {
+  gitlabPeekTween?.kill();
+  gitlabPeekDelay?.kill();
+  gitlabPeekTween = null;
+  gitlabPeekDelay = null;
+
+  const logo = document.querySelector("[data-gitlab-peek-logo]");
+  if (logo) {
+    gsap.set(logo, {
+      xPercent: -50,
+      yPercent: -50,
+      x: 0,
+      y: 0,
+      rotation: 0,
+      scale: 0.85,
+      opacity: 0,
+    });
+  }
+}
+
+function startGitlabPeek() {
+  stopGitlabPeek();
+  if (reducedMotionQuery.matches) return;
+
+  const wrap = document.querySelector("[data-gitlab-peek]");
+  const logo = document.querySelector("[data-gitlab-peek-logo]");
+  const btn = document.querySelector("[data-gitlab-peek-btn]");
+  if (!wrap || !logo || !btn) return;
+
+  // Center behind the button; GSAP owns transform (no CSS translate fight).
+  gsap.set(logo, {
+    xPercent: -50,
+    yPercent: -50,
+    x: 0,
+    y: 0,
+    rotation: 0,
+    scale: 0.85,
+    opacity: 0,
+  });
+
+  const peekOnce = () => {
+    // Distances must clear the button bounds — keep peeks close to the edge.
+    const btnRect = btn.getBoundingClientRect();
+    const logoSize = logo.getBoundingClientRect().width || 56;
+    const peekPast = logoSize * 0.28;
+    const side = gsap.utils.random(["top", "bottom", "left", "right"]);
+
+    let x = 0;
+    let y = 0;
+    // Orient the logo toward the direction it peeks from.
+    let rotation = 0;
+    if (side === "top") {
+      y = -(btnRect.height / 2 + peekPast);
+      x = gsap.utils.random(-btnRect.width * 0.15, btnRect.width * 0.15);
+      rotation = 0;
+    } else if (side === "bottom") {
+      y = btnRect.height / 2 + peekPast;
+      x = gsap.utils.random(-btnRect.width * 0.15, btnRect.width * 0.15);
+      rotation = 180;
+    } else if (side === "left") {
+      x = -(btnRect.width / 2 + peekPast);
+      y = gsap.utils.random(-btnRect.height * 0.2, btnRect.height * 0.2);
+      rotation = -90;
+    } else {
+      x = btnRect.width / 2 + peekPast;
+      y = gsap.utils.random(-btnRect.height * 0.2, btnRect.height * 0.2);
+      rotation = 90;
+    }
+
+    gitlabPeekTween?.kill();
+    gitlabPeekTween = gsap
+      .timeline({
+        onComplete: () => {
+          gitlabPeekDelay?.kill();
+          gitlabPeekDelay = gsap.delayedCall(
+            gsap.utils.random(4.5, 8),
+            peekOnce,
+          );
+        },
+      })
+      .to(logo, {
+        x,
+        y,
+        rotation,
+        scale: 1,
+        opacity: 1,
+        duration: 0.75,
+        ease: "power2.out",
+      })
+      .to(logo, {
+        x: 0,
+        y: 0,
+        rotation,
+        scale: 0.85,
+        opacity: 0,
+        duration: 0.65,
+        ease: "power2.in",
+        delay: gsap.utils.random(0.8, 1.4),
+      });
+  };
+
+  // Wait for the finale fade-in so layout size is correct.
+  gitlabPeekDelay = gsap.delayedCall(1.1, peekOnce);
+}
+
 function showFinale(choice, { animate = true } = {}) {
   revealPanels.forEach((panel) => {
     panel.hidden = panel.dataset.pathReveal !== choice;
@@ -193,6 +300,12 @@ function showFinale(choice, { animate = true } = {}) {
 
   const reveal = revealPanels.find((panel) => panel.dataset.pathReveal === choice);
   if (!reveal) return;
+
+  if (choice === "build") {
+    startGitlabPeek();
+  } else {
+    stopGitlabPeek();
+  }
 
   if (animate) {
     gsap.fromTo(
@@ -206,6 +319,7 @@ function showFinale(choice, { animate = true } = {}) {
 }
 
 function hideFinale() {
+  stopGitlabPeek();
   revealPanels.forEach((panel) => {
     panel.hidden = true;
     gsap.set(panel, { clearProps: "opacity,transform" });
