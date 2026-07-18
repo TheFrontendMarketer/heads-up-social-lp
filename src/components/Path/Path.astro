@@ -1,90 +1,162 @@
 ---
 import "./Path.css";
+
+const GITHUB_REPO = "https://github.com/TheFrontendMarketer/heads-up-social-lp";
 ---
 
 <section id="path" class="px-[5%] py-16 md:py-24 lg:py-28" data-path-section>
-  <div class="mx-auto max-w-7xl">
-    <div class="mb-4 md:mb-6">
-      <div class="mx-auto w-full max-w-lg text-center">
-        <h2 class="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
-          Choose your path
-        </h2>
-        <p class="min-[959px]:hidden">Tap the path that feels right for you.</p>
-        <p class="hidden min-[959px]:block">
-          Move your heart along the path that feels right for you!
-        </p>
+  <div class="path-stage mx-auto max-w-7xl" data-path-stage>
+    <div data-path-choose>
+      <div class="mb-4 md:mb-6" data-path-intro>
+        <div class="mx-auto w-full max-w-lg text-center">
+          <h2 class="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
+            Choose your path
+          </h2>
+          <p class="min-[959px]:hidden">Tap the path that feels right for you.</p>
+          <p class="hidden min-[959px]:block">
+            Move your heart along the path that feels right for you!
+          </p>
+        </div>
       </div>
-    </div>
 
-    <!-- Desktop only: animated fork with draggable heart -->
-    <div
-      class="mb-10 hidden justify-center min-[959px]:mb-12 min-[959px]:flex"
-      data-path-fork
-    >
-      <svg
-        class="path-fork"
-        data-path-svg
-        viewBox="0 0 640 272"
-        xmlns="http://www.w3.org/2000/svg"
+      <!-- Desktop only: animated fork with draggable heart -->
+      <div
+        class="mb-10 hidden justify-center min-[959px]:mb-12 min-[959px]:flex"
+        data-path-fork
       >
-        <path class="path-fork__line" data-path-stem d="M320 0 L320 88"></path>
-        <path
-          class="path-fork__line"
-          data-path-left
-          d="M320 88 C320 118, 282 134, 244 148 C206 162, 172 178, 158 196 C148 210, 146 228, 148 246"
-        ></path>
-        <path
-          class="path-fork__line"
-          data-path-right
-          d="M320 88 C320 118, 358 134, 396 148 C434 162, 468 178, 482 196 C492 210, 494 228, 492 246"
-        ></path>
-        <circle class="path-fork__dot" data-path-dot cx="148" cy="246" r="3"
-        ></circle>
-        <circle class="path-fork__dot" data-path-dot cx="492" cy="246" r="3"
-        ></circle>
-        <g class="path-fork__handle" data-path-handle transform="translate(320, 88)">
+        <svg
+          class="path-fork"
+          data-path-svg
+          viewBox="0 0 640 272"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path class="path-fork__line" data-path-stem d="M320 0 L320 88"></path>
           <path
-            d="M12 21 C12 21 3 13.8 3 8.4 C3 5.4 5.4 3 8.4 3 C10.3 3 11.5 4.2 12 5 C12.5 4.2 13.7 3 15.6 3 C18.6 3 21 5.4 21 8.4 C21 13.8 12 21 12 21 Z"
-            transform="scale(1.35) translate(-12 -12)"></path>
-        </g>
-      </svg>
+            class="path-fork__line"
+            data-path-left
+            d="M320 88 C320 118, 282 134, 244 148 C206 162, 172 178, 158 196 C148 210, 146 228, 148 246"
+          ></path>
+          <path
+            class="path-fork__line"
+            data-path-right
+            d="M320 88 C320 118, 358 134, 396 148 C434 162, 468 178, 482 196 C492 210, 494 228, 492 246"
+          ></path>
+          <circle class="path-fork__dot" data-path-dot cx="148" cy="246" r="3"
+          ></circle>
+          <circle class="path-fork__dot" data-path-dot cx="492" cy="246" r="3"
+          ></circle>
+          <g
+            class="path-fork__handle"
+            data-path-handle
+            transform="translate(320, 88)"
+          >
+            <path
+              d="M12 21 C12 21 3 13.8 3 8.4 C3 5.4 5.4 3 8.4 3 C10.3 3 11.5 4.2 12 5 C12.5 4.2 13.7 3 15.6 3 C18.6 3 21 5.4 21 8.4 C21 13.8 12 21 12 21 Z"
+              transform="scale(1.35) translate(-12 -12)"></path>
+          </g>
+        </svg>
+      </div>
+
+      <div
+        class="path-choices mx-auto grid max-w-5xl grid-cols-1 gap-4 min-[959px]:grid-cols-2 min-[959px]:gap-0"
+        data-path-choices
+      >
+        <div
+          class="path-option"
+          data-path-option
+          data-path-choice="subscribe"
+          role="button"
+          tabindex="0"
+        >
+          <img
+            src="/subscribe-icon.png"
+            alt=""
+            class="path-option__icon"
+            aria-hidden="true"
+          />
+          <h3 class="path-option__title">Subscribe</h3>
+        </div>
+
+        <div
+          class="path-option"
+          data-path-option
+          data-path-choice="build"
+          role="button"
+          tabindex="0"
+        >
+          <img
+            src="/build-icon.png"
+            alt=""
+            class="path-option__icon"
+            aria-hidden="true"
+          />
+          <h3 class="path-option__title">Build your own</h3>
+        </div>
+      </div>
     </div>
 
-    <div
-      class="path-choices mx-auto grid max-w-5xl grid-cols-1 gap-4 min-[959px]:grid-cols-2 min-[959px]:gap-0"
-      data-path-choices
-    >
-      <div
-        class="path-option"
-        data-path-option
-        data-path-choice="subscribe"
-        role="button"
-        tabindex="0"
-      >
-        <img
-          src="/subscribe-icon.png"
-          alt=""
-          class="path-option__icon"
-          aria-hidden="true"
-        />
-        <h3 class="path-option__title">Subscribe</h3>
-      </div>
+    <!-- Finale: centered reveal card (replaces choose state in place) -->
+    <div class="path-finale" data-path-finale hidden>
+      <article class="path-reveal" data-path-reveal="subscribe" hidden>
+        <div class="path-reveal__header">
+          <img
+            src="/subscribe-icon.png"
+            alt=""
+            class="path-reveal__icon"
+            aria-hidden="true"
+          />
+          <h3 class="path-reveal__title">Subscribe</h3>
+        </div>
+        <p class="path-reveal__copy">
+          Get the weekly briefing on YouTube, LinkedIn, and Instagram — no setup
+          required.
+        </p>
+        <form class="path-reveal__form" data-path-subscribe-form>
+          <label class="sr-only" for="path-email">Email address</label>
+          <input
+            id="path-email"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            class="path-reveal__input"
+            autocomplete="email"
+            required
+          />
+          <button type="submit" class="path-reveal__cta">Subscribe</button>
+        </form>
+      </article>
 
-      <div
-        class="path-option"
-        data-path-option
-        data-path-choice="build"
-        role="button"
-        tabindex="0"
-      >
-        <img
-          src="/build-icon.png"
-          alt=""
-          class="path-option__icon"
-          aria-hidden="true"
-        />
-        <h3 class="path-option__title">Build your own</h3>
-      </div>
+      <article class="path-reveal" data-path-reveal="build" hidden>
+        <div class="path-reveal__header">
+          <img
+            src="/build-icon.png"
+            alt=""
+            class="path-reveal__icon"
+            aria-hidden="true"
+          />
+          <h3 class="path-reveal__title">Build your own</h3>
+        </div>
+        <p class="path-reveal__copy">
+          Fork the repo, customize the platform list, and deploy your version.
+        </p>
+        <ol class="path-reveal__steps">
+          <li>Clone the repo</li>
+          <li>Make it your own</li>
+          <li>Deploy</li>
+        </ol>
+        <a
+          href={GITHUB_REPO}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="path-reveal__cta path-reveal__cta--link"
+        >
+          View on GitHub
+        </a>
+      </article>
+
+      <button type="button" class="path-back" data-path-back>
+        Choose another path
+      </button>
     </div>
   </div>
 </section>

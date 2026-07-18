@@ -19,18 +19,6 @@ const handle = document.querySelector("[data-path-handle]");
 const SAMPLE_COUNT = 240;
 const COMMIT_THRESHOLD = 0.98;
 const DUST_PARTICLE_COUNT = 120;
-/* Timing tune — restore Path.js.before-timing-tune if you dislike this.
- * Previous: card/branch 1.25s, particle delay 0.72+0.18, particle dur 0.65–1.3,
- * zoom 0.85s, zoom only after dissolve onComplete (felt like a dead pause).
- */
-const DISSOLVE_DURATION = 0.9;
-const ZOOM_START_AT = 0.75; // overlap: start zoom before particles finish
-const ZOOM_DURATION = 0.65;
-const CARD_SHADOW_DEFAULT = "8px 8px 0 0 #18181b";
-const CARD_SHADOW_SELECTED =
-  "inset 0 0 0 1px rgba(69, 123, 157, 0.4), 0 0 28px rgba(69, 123, 157, 0.28)";
-const CARD_BG_DEFAULT = "#09090b";
-const CARD_BG_SELECTED = "rgba(69, 123, 157, 0.12)";
 const desktopQuery = window.matchMedia("(min-width: 959px)");
 const reducedMotionQuery = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
@@ -115,16 +103,7 @@ function getSvgPoint(event) {
 function clearSelectedOptions() {
   options.forEach((option) => {
     option.classList.remove("is-selected", "is-winner");
-    gsap.to(option, {
-      x: 0,
-      y: 0,
-      backgroundColor: CARD_BG_DEFAULT,
-      boxShadow: CARD_SHADOW_DEFAULT,
-      borderColor: "#27272a",
-      duration: 0.2,
-      ease: "power2.out",
-      overwrite: "auto",
-    });
+    gsap.set(option, { x: 0, y: 0 });
   });
 }
 
@@ -135,14 +114,6 @@ function selectOption(choice) {
   if (!selected) return;
 
   selected.classList.add("is-selected");
-  gsap.to(selected, {
-    backgroundColor: CARD_BG_SELECTED,
-    boxShadow: CARD_SHADOW_SELECTED,
-    borderColor: "rgba(69, 123, 157, 0.35)",
-    duration: 0.22,
-    ease: "power2.out",
-    overwrite: "auto",
-  });
 }
 
 function lockWinningCard(winningChoice) {
@@ -151,15 +122,7 @@ function lockWinningCard(winningChoice) {
 
   gsap.killTweensOf(winningCard);
   winningCard.classList.add("is-winner");
-  gsap.set(winningCard, {
-    x: 0,
-    y: 0,
-    opacity: 1,
-    backgroundColor: CARD_BG_SELECTED,
-    boxShadow: CARD_SHADOW_SELECTED,
-    borderColor: "rgba(69, 123, 157, 0.35)",
-    clearProps: "filter",
-  });
+  gsap.set(winningCard, { x: 0, y: 0, opacity: 1, clearProps: "filter" });
 }
 
 function getLosingForkElements(winningChoice) {
@@ -225,16 +188,7 @@ function clearSequenceArtifacts() {
 
   options.forEach((option) => {
     option.classList.remove("is-dissolving", "is-winner", "is-selected");
-    gsap.set(option, {
-      opacity: 1,
-      visibility: "visible",
-      x: 0,
-      y: 0,
-      backgroundColor: CARD_BG_DEFAULT,
-      boxShadow: CARD_SHADOW_DEFAULT,
-      borderColor: "#27272a",
-      clearProps: "filter",
-    });
+    gsap.set(option, { clearProps: "opacity,visibility,x,filter" });
   });
 
   if (left && right) {
@@ -310,11 +264,7 @@ function zoomThroughWinner(winningChoice) {
     y: 0,
     scale: 1,
     opacity: 1,
-    filter: "blur(0px)",
     transformOrigin: "center center",
-    borderColor: "rgba(69, 123, 157, 0.35)",
-    boxShadow:
-      "inset 0 0 0 1px rgba(69, 123, 157, 0.4), 0 0 28px rgba(69, 123, 157, 0.28)",
   });
 
   // Hide the real winner — only the zoom clone should be visible.
@@ -358,8 +308,7 @@ function zoomThroughWinner(winningChoice) {
       x: centerX - cardCenterX,
       y: centerY - cardCenterY,
       scale,
-      filter: "blur(2px)",
-      duration: ZOOM_DURATION,
+      duration: 0.85,
       ease: "power3.in",
     },
     0,
@@ -369,10 +318,10 @@ function zoomThroughWinner(winningChoice) {
     clone,
     {
       opacity: 0,
-      duration: 0.28,
+      duration: 0.35,
       ease: "power1.in",
     },
-    "-=0.2",
+    "-=0.25",
   );
 }
 
@@ -407,26 +356,16 @@ function dissolveLosingCard(winningChoice, onComplete) {
   fragments.forEach(({ particle }) => dustLayer.appendChild(particle));
 
   dustTimeline?.kill();
-  let zoomStarted = false;
-
-  const startZoom = () => {
-    if (zoomStarted) return;
-    zoomStarted = true;
-    // Keep leftover dust drifting; hide the lost card shell now.
-    gsap.set(losingCard, { visibility: "hidden" });
-    if (losingForkTargets.length) {
-      gsap.set(losingForkTargets, { visibility: "hidden" });
-    }
-    onComplete?.();
-  };
-
   dustTimeline = gsap.timeline({
     onComplete: () => {
+      gsap.set(losingCard, { visibility: "hidden" });
+      if (losingForkTargets.length) {
+        gsap.set(losingForkTargets, { visibility: "hidden" });
+      }
       dustLayer?.remove();
       dustLayer = null;
       dustTimeline = null;
-      // Safety: if overlap never fired (reduced motion / short timeline), still continue.
-      startZoom();
+      onComplete?.();
     },
   });
 
@@ -442,7 +381,7 @@ function dissolveLosingCard(winningChoice, onComplete) {
     opacity: 0,
     x: exitDirection * 48,
     filter: "blur(3px)",
-    duration: DISSOLVE_DURATION,
+    duration: 1.25,
     ease: "power2.out",
   });
 
@@ -451,18 +390,15 @@ function dissolveLosingCard(winningChoice, onComplete) {
       losingForkTargets,
       {
         opacity: 0,
-        duration: DISSOLVE_DURATION,
+        duration: 1.25,
         ease: "power2.out",
       },
       0,
     );
   }
 
-  // Kick off zoom while dust is still finishing — removes the dead pause.
-  dustTimeline.call(startZoom, null, ZOOM_START_AT);
-
   fragments.forEach(({ particle, edgeProgress }) => {
-    const delay = edgeProgress * 0.4 + Math.random() * 0.12;
+    const delay = edgeProgress * 0.72 + Math.random() * 0.18;
 
     dustTimeline.fromTo(
       particle,
@@ -479,7 +415,7 @@ function dissolveLosingCard(winningChoice, onComplete) {
         opacity: 0,
         scale: gsap.utils.random(0.1, 0.55),
         rotation: gsap.utils.random(-180, 180),
-        duration: gsap.utils.random(0.5, 0.9),
+        duration: gsap.utils.random(0.65, 1.3),
         ease: "power1.out",
         keyframes: [
           { opacity: 0.9, duration: 0.08 },

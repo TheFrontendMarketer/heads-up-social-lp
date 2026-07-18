@@ -1,3 +1,7 @@
+.path-stage {
+  position: relative;
+}
+
 .path-fork {
   display: block;
   width: min(100%, 64rem); /* match max-w-5xl card grid */
@@ -48,9 +52,8 @@
   background: #09090b; /* zinc-950 */
   box-shadow: 8px 8px 0 0 #18181b; /* zinc-900 hard shadow, matches Issue */
   will-change: transform, opacity;
-  transition:
-    background-color 220ms ease,
-    box-shadow 220ms ease;
+  /* Check 1: no box-shadow transition — GSAP owns selection/zoom shadows */
+  transition: background-color 220ms ease;
 }
 
 @media (min-width: 959px) {
@@ -103,16 +106,21 @@
 }
 
 .path-option.is-selected {
-  background: rgba(230, 57, 70, 0.08);
-  box-shadow: inset 0 0 0 2px #e63946;
+  border-color: rgba(69, 123, 157, 0.35);
+  /* background + box-shadow driven by GSAP (check 1) */
 }
 
 .path-option.is-selected .path-option__title {
-  color: #e63946;
+  color: #457b9d;
 }
 
 .path-option.is-winner {
   pointer-events: none;
+  border-color: rgba(69, 123, 157, 0.35);
+}
+
+.path-option.is-winner .path-option__title {
+  color: #457b9d;
 }
 
 .path-option.is-dissolving {
@@ -133,6 +141,176 @@
   display: block;
   background: #f4a261;
   will-change: transform, opacity;
+}
+
+/* Zoom-through overlay — clone only, layout stays put */
+.path-zoom-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.path-zoom-layer .path-option {
+  position: absolute;
+  margin: 0;
+  cursor: default;
+  transition: none; /* Check 1: never let CSS ease fight GSAP zoom */
+  /* Soft glow for fly-through — overrides hard selected stroke */
+  border-color: rgba(69, 123, 157, 0.35);
+  box-shadow:
+    inset 0 0 0 1px rgba(69, 123, 157, 0.4),
+    0 0 28px rgba(69, 123, 157, 0.28);
+  will-change: transform, opacity, filter, box-shadow;
+}
+
+.path-zoom-layer .path-option.is-selected,
+.path-zoom-layer .path-option.is-winner {
+  background: rgba(69, 123, 157, 0.1);
+  box-shadow:
+    inset 0 0 0 1px rgba(69, 123, 157, 0.4),
+    0 0 28px rgba(69, 123, 157, 0.28);
+}
+
+/* Finale centered reveal */
+.path-finale {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.path-stage.is-finale .path-finale {
+  display: flex;
+}
+
+.path-stage.is-finale [data-path-choose] {
+  display: none;
+}
+
+.path-reveal {
+  width: 100%;
+  max-width: 32rem;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid #27272a;
+  background: #09090b;
+  box-shadow: 8px 8px 0 0 #18181b;
+}
+
+.path-reveal__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.path-reveal__icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  object-fit: contain;
+}
+
+.path-reveal__title {
+  margin: 0;
+  color: #457b9d;
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.path-reveal__copy {
+  margin: 0 0 1.5rem;
+  color: #a1a1aa;
+  line-height: 1.5;
+}
+
+.path-reveal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 480px) {
+  .path-reveal__form {
+    flex-direction: row;
+  }
+}
+
+.path-reveal__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid #3f3f46;
+  background: #18181b;
+  color: #f4f4f5;
+  font-size: 1rem;
+}
+
+.path-reveal__input:focus {
+  outline: 2px solid #e63946;
+  outline-offset: 2px;
+}
+
+.path-reveal__steps {
+  margin: 0 0 1.5rem;
+  padding-left: 1.25rem;
+  text-align: left;
+  color: #e4e4e7;
+  line-height: 1.6;
+}
+
+.path-reveal__steps li + li {
+  margin-top: 0.35rem;
+}
+
+.path-reveal__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: #e63946;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.path-reveal__cta:hover {
+  background: #cf2f3c;
+}
+
+.path-reveal__cta--link {
+  text-decoration: none;
+}
+
+.path-back {
+  margin-top: 1.5rem;
+  padding: 0.5rem 0;
+  border: none;
+  background: none;
+  color: #a1a1aa;
+  font-size: 0.9375rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.path-back:hover {
+  color: #e4e4e7;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 958px) {
