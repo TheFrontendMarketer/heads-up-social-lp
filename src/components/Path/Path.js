@@ -320,6 +320,7 @@ function showFinale(choice, { animate = true } = {}) {
 
 function hideFinale() {
   stopGitlabPeek();
+  resetSubscribeForm();
   revealPanels.forEach((panel) => {
     panel.hidden = true;
     gsap.set(panel, { clearProps: "opacity,transform" });
@@ -806,10 +807,39 @@ function setupBackButton() {
   backBtn?.addEventListener("click", resetPath);
 }
 
+function resetSubscribeForm() {
+  const form = document.querySelector("[data-path-subscribe-form]");
+  const success = document.querySelector("[data-path-subscribe-success]");
+  if (!form) return;
+
+  form.reset();
+  form.classList.remove("is-submitted");
+  form.hidden = false;
+  gsap.set(form, { clearProps: "opacity" });
+
+  if (success) {
+    success.hidden = true;
+    gsap.set(success, { clearProps: "opacity" });
+  }
+}
+
 function setupSubscribeForm() {
   const form = document.querySelector("[data-path-subscribe-form]");
-  form?.addEventListener("submit", (event) => {
+  const success = document.querySelector("[data-path-subscribe-success]");
+  if (!form || !success) return;
+
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
+
+    form.classList.add("is-submitted");
+    form.hidden = true;
+    success.hidden = false;
+
+    gsap.fromTo(
+      success,
+      { opacity: 0, y: 8 },
+      { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+    );
   });
 }
 

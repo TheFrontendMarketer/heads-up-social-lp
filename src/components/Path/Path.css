@@ -231,6 +231,26 @@
   gap: 0.75rem;
 }
 
+.path-reveal__form.is-submitted {
+  display: none;
+}
+
+.path-reveal__success {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(69, 123, 157, 0.45);
+  background: rgba(69, 123, 157, 0.12);
+  color: #e4e4e7;
+  line-height: 1.5;
+}
+
+.path-reveal__note {
+  margin: 1.25rem 0 0;
+  color: #71717a;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
 @media (min-width: 480px) {
   .path-reveal__form {
     flex-direction: row;
