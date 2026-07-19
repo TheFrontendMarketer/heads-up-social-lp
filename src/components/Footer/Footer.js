@@ -69,13 +69,17 @@ if (
       },
       "-=0.3",
     )
-    // GSAP-driven LTR fill — single progress keeps white/red edge aligned.
-    .to(wipe, {
-      t: 1,
-      duration: 1,
-      ease: "power2.inOut",
-      onUpdate: () => applyFillWipe(fillBase, fillRed, wipe.t),
-    })
+    // Start fill while title is still settling — less dead air before red.
+    .to(
+      wipe,
+      {
+        t: 1,
+        duration: 1,
+        ease: "power2.inOut",
+        onUpdate: () => applyFillWipe(fillBase, fillRed, wipe.t),
+      },
+      "-=0.4",
+    )
     .to(
       rule,
       {
