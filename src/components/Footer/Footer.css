@@ -1,0 +1,33 @@
+.footer-title {
+  line-height: 1.4;
+  overflow: visible;
+}
+
+/*
+ * Dual-layer LTR wipe. White is clipped away as red reveals so layers
+ * never stack (stacked antialiasing made brand red look washed out).
+ * Negative insets keep Atomic Marker brush / italic overflow visible.
+ * clip-path values are set/animated by GSAP in Footer.js.
+ */
+.footer-fill {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+
+.footer-fill__base {
+  color: #fff;
+  /* Left -25% keeps the H brush stroke; right -25% keeps the P */
+  clip-path: inset(-50% -25% -50% -25%);
+}
+
+.footer-fill__red {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #e63946;
+  white-space: nowrap;
+  pointer-events: none;
+  /* right 125% + left -25% = empty (no H sliver, no crop) */
+  clip-path: inset(-50% 125% -50% -25%);
+}

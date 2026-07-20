@@ -1,3 +1,7 @@
+---
+import "./Footer.css";
+---
+
 <footer
   id="footer"
   class="px-[5%] pt-24 pb-12 md:pt-32 md:pb-18 lg:pt-40 lg:pb-20"
@@ -41,67 +45,21 @@
     >
       <p class="mt-8 md:mt-0">© 2026 Heads Up Social. All rights reserved.</p>
       <ul
-        listName="footer7_legal-list"
         class="grid grid-flow-row grid-cols-[max-content] justify-center gap-y-4 text-sm md:grid-flow-col md:gap-x-6 md:gap-y-0"
       >
-        <li
-          elementName="footer7_legal-link"
-          class="underline decoration-zinc-400 underline-offset-1"
-        >
+        <li class="underline decoration-zinc-400 underline-offset-1">
           <a href="#">Privacy Policy</a>
         </li>
-        <li
-          elementName="footer7_legal-link-2"
-          class="underline decoration-zinc-400 underline-offset-1"
-        >
+        <li class="underline decoration-zinc-400 underline-offset-1">
           <a href="#">Terms of Service</a>
         </li>
-        <li
-          elementName="footer7_legal-link-3"
-          class="underline decoration-zinc-400 underline-offset-1"
-        >
+        <li class="underline decoration-zinc-400 underline-offset-1">
           <a href="#">Cookies Settings</a>
         </li>
       </ul>
     </div>
   </div>
 </footer>
-
-<style>
-  .footer-title {
-    line-height: 1.4;
-    overflow: visible;
-  }
-
-  /*
-   * Dual-layer LTR wipe. White is clipped away as red reveals so layers
-   * never stack (stacked antialiasing made brand red look washed out).
-   * Negative insets keep Atomic Marker brush / italic overflow visible.
-   * clip-path values are set/animated by GSAP in Footer.js.
-   */
-  .footer-fill {
-    position: relative;
-    display: inline-block;
-    overflow: visible;
-  }
-
-  .footer-fill__base {
-    color: #fff;
-    /* Left -25% keeps the H brush stroke; right -25% keeps the P */
-    clip-path: inset(-50% -25% -50% -25%);
-  }
-
-  .footer-fill__red {
-    position: absolute;
-    left: 0;
-    top: 0;
-    color: #e63946;
-    white-space: nowrap;
-    pointer-events: none;
-    /* right 125% + left -25% = empty (no H sliver, no crop) */
-    clip-path: inset(-50% 125% -50% -25%);
-  }
-</style>
 
 <script>
   import "./Footer.js";
