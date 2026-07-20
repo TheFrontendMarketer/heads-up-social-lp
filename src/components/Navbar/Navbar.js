@@ -15,6 +15,11 @@ if (btn && menu && hamburgerIcon && closeIcon) {
     closeIcon.classList.toggle("hidden", !open);
   }
 
+  function setMenuAria(open) {
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  }
+
   function openMenu() {
     if (closeTimer) {
       clearTimeout(closeTimer);
@@ -26,6 +31,7 @@ if (btn && menu && hamburgerIcon && closeIcon) {
     menu.classList.remove("scale-95", "opacity-0");
     menu.classList.add("scale-100", "opacity-100");
     setIconState(true);
+    setMenuAria(true);
   }
 
   function closeMenu() {
@@ -34,6 +40,7 @@ if (btn && menu && hamburgerIcon && closeIcon) {
     menu.classList.add("scale-95", "opacity-0");
     menu.classList.remove("scale-100", "opacity-100");
     setIconState(false);
+    setMenuAria(false);
 
     closeTimer = setTimeout(() => {
       menu.classList.add("hidden");
