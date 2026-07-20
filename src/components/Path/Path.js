@@ -336,6 +336,9 @@ function showFinale(choice, { animate = true } = {}) {
   if (finaleEl) finaleEl.hidden = false;
   stage?.classList.add("is-finale");
 
+  // Bring Path into view so the centered finale fills the screen (footer below fold).
+  section?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   const reveal = revealPanels.find((panel) => panel.dataset.pathReveal === choice);
   if (!reveal) return;
 

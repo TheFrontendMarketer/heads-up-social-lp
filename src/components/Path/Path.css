@@ -172,7 +172,14 @@
     0 0 28px rgba(69, 123, 157, 0.28);
 }
 
-/* Finale centered reveal */
+/* Finale centered reveal — fill viewport so footer stays below the fold */
+.path-stage.is-finale {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 5rem);
+}
+
 .path-finale {
   display: none;
   flex-direction: column;
@@ -182,6 +189,7 @@
 
 .path-stage.is-finale .path-finale {
   display: flex;
+  width: 100%;
 }
 
 .path-stage.is-finale [data-path-choose] {
