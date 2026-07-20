@@ -1,7 +1,5 @@
 ---
-import { Image } from "astro:assets";
 import "./About.css";
-import aboutHearts from "../../assets/about-hearts.jpg";
 
 const features = [
   {
@@ -57,11 +55,15 @@ const features = [
   </div>
 
   <div class="absolute inset-0 z-0" aria-hidden="true">
-    <Image
-      src={aboutHearts}
-      alt=""
-      widths={[800, 1200, 1600]}
+    <img
+      src="/images/hearts_1200.webp"
+      srcset="/images/hearts_800.webp 800w, /images/hearts_1200.webp 1200w, /images/hearts_1600.webp 1600w"
       sizes="100vw"
+      width="1200"
+      height="800"
+      alt=""
+      loading="lazy"
+      decoding="async"
       class="absolute inset-0 size-full object-cover"
     />
     <div class="absolute inset-0 bg-black/50"></div>
