@@ -1,4 +1,9 @@
-import { gsap, ScrollTrigger, DrawSVGPlugin } from "../../lib/gsap.js";
+import { gsap, ScrollTrigger, DrawSVGPlugin, Draggable } from "../../lib/gsap.js";
+
+/*
+ * Heart drag uses GSAP Draggable — revert with:
+ *   cp src/components/Path/Path.js.before-draggable src/components/Path/Path.js
+ */
 
 const section = document.querySelector("[data-path-section]");
 const stage = document.querySelector("[data-path-stage]");
@@ -37,7 +42,7 @@ const reducedMotionQuery = window.matchMedia(
 );
 
 let isInteractive = false;
-let isDragging = false;
+let heartDrag = null;
 let branches = null;
 let activeBranch = "left";
 let currentProgress = 0;
@@ -96,6 +101,39 @@ function closestOnBranch(branch, point) {
 function setHandlePoint(point) {
   if (!handle) return;
   gsap.set(handle, { x: point.x, y: point.y });
+  syncHeartDrag(point);
+}
+
+function syncHeartDrag(point) {
+  if (!heartDrag || !point) return;
+  heartDrag.x = point.x;
+  heartDrag.y = point.y;
+  heartDrag.update();
+}
+
+function setHeartDragEnabled(enabled) {
+  if (!heartDrag) return;
+  if (enabled) {
+    heartDrag.enable();
+  } else {
+    heartDrag.disable();
+  }
+}
+
+function nearestPointOnFork(point) {
+  const nearestLeft = closestOnBranch(branches.left, point);
+  const nearestRight = closestOnBranch(branches.right, point);
+
+  return nearestLeft.dist <= nearestRight.dist
+    ? { branch: "left", ...nearestLeft }
+    : { branch: "right", ...nearestRight };
+}
+
+function applyNearestOnFork(point) {
+  const nearest = nearestPointOnFork(point);
+  activeBranch = nearest.branch;
+  currentProgress = nearest.progress;
+  setHandlePoint(nearest);
 }
 
 function getSvgPoint(event) {
@@ -658,6 +696,7 @@ function commitChoice(choice) {
   committedChoice = choice;
   selectOption(choice);
   isInteractive = false;
+  setHeartDragEnabled(false);
 
   if (isDesktop()) {
     runFinaleDesktop(choice);
@@ -685,6 +724,8 @@ function resetPath() {
     gsap.set([stem, left, right], { drawSVG: "100%", opacity: 1 });
     gsap.set(dots, { scale: 1, opacity: 1, visibility: "visible" });
     isInteractive = true;
+    setHeartDragEnabled(true);
+    syncHeartDrag({ x: forkStart.x, y: forkStart.y });
   }
 
   if (chooseEl) gsap.set(chooseEl, { clearProps: "opacity" });
@@ -734,41 +775,26 @@ function moveHeartToChoice(choice) {
   });
 }
 
-function onPointerMove(event) {
-  if (!isDragging || !isInteractive || !branches || !isDesktop()) return;
+function setupHeartDrag() {
+  if (!handle || heartDrag) return;
 
-  const point = getSvgPoint(event);
-  if (!point) return;
+  heartDrag = Draggable.create(handle, {
+    type: "x,y",
+    allowEventDefault: true,
+    onPress() {
+      if (!isInteractive || !isDesktop() || sequenceRunning || !branches) {
+        return false;
+      }
+    },
+    onDrag() {
+      const point = getSvgPoint(this.pointerEvent);
+      if (!point) return;
+      applyNearestOnFork(point);
+    },
+    onRelease: resolveChoice,
+  })[0];
 
-  const nearestLeft = closestOnBranch(branches.left, point);
-  const nearestRight = closestOnBranch(branches.right, point);
-  const nearest =
-    nearestLeft.dist <= nearestRight.dist
-      ? { branch: "left", ...nearestLeft }
-      : { branch: "right", ...nearestRight };
-
-  activeBranch = nearest.branch;
-  currentProgress = nearest.progress;
-  setHandlePoint(nearest);
-}
-
-function onPointerUp() {
-  if (!isDragging) return;
-
-  isDragging = false;
-  window.removeEventListener("pointermove", onPointerMove);
-  window.removeEventListener("pointerup", onPointerUp);
-
-  resolveChoice();
-}
-
-function onPointerDown(event) {
-  if (!isInteractive || !isDesktop() || sequenceRunning) return;
-
-  isDragging = true;
-  event.preventDefault();
-  window.addEventListener("pointermove", onPointerMove);
-  window.addEventListener("pointerup", onPointerUp);
+  setHeartDragEnabled(false);
 }
 
 function onOptionActivate(choice) {
@@ -943,9 +969,10 @@ function setupDesktopFork() {
     )
     .add(() => {
       isInteractive = true;
+      setHeartDragEnabled(true);
     });
 
-  handle.addEventListener("pointerdown", onPointerDown);
+  setupHeartDrag();
   desktopReady = true;
 }
 
