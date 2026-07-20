@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import "./About.css";
+import aboutHearts from "../../assets/about-hearts.jpg";
 
 const features = [
   {
@@ -44,7 +46,7 @@ const features = [
         features.map((feature) => (
           <div class="w-full text-center">
             <div class="mb-5 flex h-12 justify-center md:mb-6">
-              <img src={feature.icon} class="size-12" alt="" />
+              <img src={feature.icon} class="size-12" alt="" aria-hidden="true" />
             </div>
             <h3>{feature.title}</h3>
             <p class="text-zinc-200">{feature.body}</p>
@@ -54,11 +56,13 @@ const features = [
     </div>
   </div>
 
-  <div class="absolute inset-0 z-0">
-    <img
-      src="https://res.cloudinary.com/dhytwf10i/image/upload/f_auto,q_auto,w_1600/v1784067184/hearts_jgmory.png"
+  <div class="absolute inset-0 z-0" aria-hidden="true">
+    <Image
+      src={aboutHearts}
+      alt=""
+      widths={[800, 1200, 1600]}
+      sizes="100vw"
       class="absolute inset-0 size-full object-cover"
-      alt="Social media hearts"
     />
     <div class="absolute inset-0 bg-black/50"></div>
   </div>

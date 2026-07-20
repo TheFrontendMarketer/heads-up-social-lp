@@ -1,3 +1,10 @@
+---
+import { Image } from "astro:assets";
+import heroCode from "../../assets/hero-code.jpg";
+import heroSite from "../../assets/hero-site.jpg";
+import heroGitlab from "../../assets/hero-gitlab.jpg";
+---
+
 <section class="px-[5%] py-16 md:py-24 lg:py-28">
   <div class="container">
     <div class="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16">
@@ -23,24 +30,31 @@
       </div>
       <div class="relative flex w-full" data-hero-stack>
         <div class="absolute bottom-[10%] left-0 z-20 w-[35%]" data-hero-code>
-          <img
-            src="https://res.cloudinary.com/dhytwf10i/image/upload/f_auto,q_auto,w_600/v1784023794/code_pz4n4k.png"
-            class="aspect-square size-full object-cover rounded-lg"
+          <Image
+            src={heroCode}
             alt="Code in code editor"
+            widths={[160, 320, 400]}
+            sizes="(max-width: 768px) 35vw, 160px"
+            class="aspect-square size-full object-cover rounded-lg"
           />
         </div>
         <div class="relative z-10 mx-[10%] w-full" data-hero-main>
-          <img
-            src="https://res.cloudinary.com/dhytwf10i/image/upload/f_auto,q_auto,w_1000/v1784023953/site2_b3egh7.png"
+          <Image
+            src={heroSite}
             alt="Heads Up Social app"
-            class="rounded-lg"
+            widths={[400, 700, 1000]}
+            sizes="(max-width: 768px) 80vw, 352px"
+            class="rounded-lg h-auto w-full"
+            priority
           />
         </div>
         <div class="absolute right-0 top-[10%] z-30 w-2/5" data-hero-repo>
-          <img
-            src="https://res.cloudinary.com/dhytwf10i/image/upload/f_auto,q_auto,w_600/v1784023794/gitlabrepo_ryvc6v.png"
-            class="aspect-3/2 size-full object-cover rounded-lg"
+          <Image
+            src={heroGitlab}
             alt="GitLab repo"
+            widths={[180, 360, 480]}
+            sizes="(max-width: 768px) 40vw, 180px"
+            class="aspect-3/2 size-full object-cover rounded-lg"
           />
         </div>
       </div>
