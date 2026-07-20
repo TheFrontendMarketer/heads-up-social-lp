@@ -62,23 +62,6 @@ h3 {
   }
 }
 
-.panel {
-  min-height: 80vh;
-  padding: 8vh 8vw;
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.panel.tall {
-  min-height: 100vh;
-  justify-content: center;
-}
-
-.panel.end {
-  background: #15161a;
-}
 
 .split-word {
   display: inline-block;
