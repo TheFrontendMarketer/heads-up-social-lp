@@ -5,7 +5,8 @@
   src: url("/atomic-marker.woff") format("woff");
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  /* Brief invisible period instead of showing a fallback (FOUT) */
+  font-display: block;
 }
 
 :root {

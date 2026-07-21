@@ -1,9 +1,11 @@
 /*
- * Clip SplitText’s yPercent rise. Padding keeps Atomic Marker
- * brush overflow visible after chars settle.
+ * Hidden until Atomic Marker loads (avoids fallback-font flash).
+ * No overflow clipping — Atomic Marker brush strokes sit outside the em box.
  */
 .hero-title {
-  overflow: hidden;
-  padding-block: 0.12em;
-  margin-block: -0.12em;
+  visibility: hidden;
+}
+
+.hero-title.is-font-ready {
+  visibility: visible;
 }

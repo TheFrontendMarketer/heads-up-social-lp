@@ -5,14 +5,23 @@ const title = document.querySelector("#title");
 const subtitle = document.querySelector("#subtitle");
 const heroStack = document.querySelector("[data-hero-stack]");
 
+async function waitForAtomicMarker() {
+  if (!document.fonts?.load) return;
+
+  try {
+    // Ensure this face is fetched before we show / split the title.
+    await document.fonts.load('700 64px "Atomic Marker"');
+    await document.fonts.ready;
+  } catch {
+    // Proceed with whatever is available.
+  }
+}
+
 async function runHeroIntro() {
-  // Wait for Atomic Marker so SplitText doesn't measure fallback metrics.
-  if (document.fonts?.ready) {
-    try {
-      await document.fonts.ready;
-    } catch {
-      // Proceed anyway if fonts API fails.
-    }
+  await waitForAtomicMarker();
+
+  if (title) {
+    title.classList.add("is-font-ready");
   }
 
   if (title && !reducedMotion) {
