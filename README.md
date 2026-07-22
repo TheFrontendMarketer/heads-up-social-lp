@@ -1,29 +1,22 @@
 <img width="200" height="200" alt="Image" src="https://github.com/user-attachments/assets/4f565c96-333c-4c85-b64d-4bad06d390f6" />
 
-This is my take on the Webflow and GSAP Hackathon challenge. Below is the official README from their repo. Hope ya'll like it!
-
-# Heads Up Social — Hackathon entry
-
+This is my take on the Webflow and GSAP Hackathon challenge. Below are some quick notes about my project and the official README from their repo. Hope ya'll like it!
+<br>
+<br>
 Landing page for Heads Up Social (Astro + GSAP + Tailwind), deployed on Webflow Cloud.
 
-- **Live:** https://heads-up-social-lp.webflow.io/
-- **Product domain:** https://headsup.social (app)
-- **Code:** https://gitlab.com/thefrontendmarketer/heads-up-social
+- **Webflow Landing page:** https://heads-up-social-lp.webflow.io/
+- **App site:** https://headsup.social
+- **App Code:** https://gitlab.com/thefrontendmarketer/heads-up-social
 
 ## GSAP to notice
 
 - **Hero** — SplitText + image entrance
 - **About** — ScrollTrigger + Physics2D hearts
-- **Path** — DrawSVG fork, Draggable heart, dissolve/zoom finale
+- **Path** — DrawSVG fork, Draggable heart, dissolve/zoom
 - **Footer** — ScrollTrigger brand fill
 
-## Local
-
-`npm install` → `npm run dev`
-
 ---
-
-*Below is the official starter README from the challenge template.*
 
 # GSAP, Astro & Webflow Cloud
 
@@ -40,9 +33,9 @@ GSAP animates anything JavaScript can touch — CSS, SVG, canvas, WebGL, custom 
 ```js
 import { gsap } from "../../lib/gsap.js";
 
-gsap.to(".box",   { x: 200, rotation: 45, duration: 1 });   // animate TO these values
-gsap.from(".box", { opacity: 0, y: 50, duration: 1 });      // animate FROM these values
-gsap.fromTo(".box", { x: 0 }, { x: 200, duration: 1 });     // explicit start and end
+gsap.to(".box", { x: 200, rotation: 45, duration: 1 }); // animate TO these values
+gsap.from(".box", { opacity: 0, y: 50, duration: 1 }); // animate FROM these values
+gsap.fromTo(".box", { x: 0 }, { x: 200, duration: 1 }); // explicit start and end
 ```
 
 Chain tweens together on a **timeline** to sequence animations:
@@ -50,7 +43,7 @@ Chain tweens together on a **timeline** to sequence animations:
 ```js
 const tl = gsap.timeline({ defaults: { duration: 0.6, ease: "power2.out" } });
 tl.to(".a", { x: 100 })
-  .to(".b", { y: 100 }, "<")   // "<" starts at the same time as the previous tween
+  .to(".b", { y: 100 }, "<") // "<" starts at the same time as the previous tween
   .to(".c", { rotation: 360 }, "-=0.3"); // overlap by 0.3s
 ```
 
@@ -58,32 +51,32 @@ tl.to(".a", { x: 100 })
 
 All of these are imported and registered in `src/lib/gsap.js`:
 
-| Plugin              | What it does                                          |
-| :------------------ | :---------------------------------------------------- |
-| `ScrollTrigger`     | Trigger and scrub animations based on scroll position |
-| `ScrollSmoother`    | Smooth, native-feeling scroll with parallax effects   |
-| `ScrollToPlugin`    | Animate the scroll position of the window or element  |
-| `Observer`          | Detect scroll/touch/pointer/wheel without scrollbars  |
-| `SplitText`         | Split text into chars/words/lines for animation       |
-| `Draggable`         | Make any element draggable, with throwing via inertia |
-| `Flip`              | Animate between any two states (FLIP technique)       |
-| `MotionPathPlugin`  | Animate elements along an SVG path or coordinates     |
-| `MotionPathHelper`  | Interactive editor for motion paths (dev only)        |
-| `DrawSVGPlugin`     | Animate SVG stroke drawing in/out                     |
-| `MorphSVGPlugin`    | Morph one SVG shape into another                      |
-| `InertiaPlugin`     | Velocity-based throwing/momentum animations           |
-| `Physics2DPlugin`   | 2D physics: velocity, acceleration, gravity           |
-| `PhysicsPropsPlugin`| Physics-driven animation of any property              |
-| `CustomEase`        | Build your own easing curves                          |
-| `CustomBounce`      | Configurable bounce easing                            |
-| `CustomWiggle`      | Configurable wiggle easing                            |
-| `ScrambleTextPlugin`| Scramble text into the final string                   |
-| `TextPlugin`        | Animate text content character-by-character           |
-| `PixiPlugin`        | Animate PIXI.js display objects                       |
-| `EaselPlugin`       | Animate EaselJS display objects                       |
-| `CSSRulePlugin`     | Animate CSS rules (e.g. `::before`, `::after`)        |
-| `GSDevTools`        | Visual scrubber for animations (dev only)             |
-| `EasePack`          | Extra eases: `SlowMo`, `RoughEase`, `ExpoScaleEase`   |
+| Plugin               | What it does                                          |
+| :------------------- | :---------------------------------------------------- |
+| `ScrollTrigger`      | Trigger and scrub animations based on scroll position |
+| `ScrollSmoother`     | Smooth, native-feeling scroll with parallax effects   |
+| `ScrollToPlugin`     | Animate the scroll position of the window or element  |
+| `Observer`           | Detect scroll/touch/pointer/wheel without scrollbars  |
+| `SplitText`          | Split text into chars/words/lines for animation       |
+| `Draggable`          | Make any element draggable, with throwing via inertia |
+| `Flip`               | Animate between any two states (FLIP technique)       |
+| `MotionPathPlugin`   | Animate elements along an SVG path or coordinates     |
+| `MotionPathHelper`   | Interactive editor for motion paths (dev only)        |
+| `DrawSVGPlugin`      | Animate SVG stroke drawing in/out                     |
+| `MorphSVGPlugin`     | Morph one SVG shape into another                      |
+| `InertiaPlugin`      | Velocity-based throwing/momentum animations           |
+| `Physics2DPlugin`    | 2D physics: velocity, acceleration, gravity           |
+| `PhysicsPropsPlugin` | Physics-driven animation of any property              |
+| `CustomEase`         | Build your own easing curves                          |
+| `CustomBounce`       | Configurable bounce easing                            |
+| `CustomWiggle`       | Configurable wiggle easing                            |
+| `ScrambleTextPlugin` | Scramble text into the final string                   |
+| `TextPlugin`         | Animate text content character-by-character           |
+| `PixiPlugin`         | Animate PIXI.js display objects                       |
+| `EaselPlugin`        | Animate EaselJS display objects                       |
+| `CSSRulePlugin`      | Animate CSS rules (e.g. `::before`, `::after`)        |
+| `GSDevTools`         | Visual scrubber for animations (dev only)             |
+| `EasePack`           | Extra eases: `SlowMo`, `RoughEase`, `ExpoScaleEase`   |
 
 Import only what you use:
 
