@@ -1,6 +1,6 @@
 <img width="200" height="200" alt="Image" src="https://github.com/user-attachments/assets/4f565c96-333c-4c85-b64d-4bad06d390f6" />
 
-This is my take on the CodeTV Hackathon challenge built with Astro, GSAP, Tailwind CSS, and deployed using Webflow. Below are some quick notes about my project and the official README from their repo. Hope ya'll like it!
+This is my take on the CodeTV Hackathon challenge built with Astro, GSAP, Tailwind CSS, and deployed using Webflow Cloud. Below are some quick notes about my project and the official README from their repo. Hope ya'll like it!
 <br>
 <br>
 
