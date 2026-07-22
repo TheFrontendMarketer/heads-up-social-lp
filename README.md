@@ -1,8 +1,29 @@
 <img width="200" height="200" alt="Image" src="https://github.com/user-attachments/assets/4f565c96-333c-4c85-b64d-4bad06d390f6" />
 
-This is my take on the Webflow and GSAP Hackathon challenge. Below is the official README from their repo. Hope ya'll like it! 
+This is my take on the Webflow and GSAP Hackathon challenge. Below is the official README from their repo. Hope ya'll like it!
 
+# Heads Up Social — Hackathon entry
 
+Landing page for Heads Up Social (Astro + GSAP + Tailwind), deployed on Webflow Cloud.
+
+- **Live:** https://heads-up-social-lp.webflow.io/
+- **Product domain:** https://headsup.social (app)
+- **Code:** https://gitlab.com/thefrontendmarketer/heads-up-social
+
+## GSAP to notice
+
+- **Hero** — SplitText + image entrance
+- **About** — ScrollTrigger + Physics2D hearts
+- **Path** — DrawSVG fork, Draggable heart, dissolve/zoom finale
+- **Footer** — ScrollTrigger brand fill
+
+## Local
+
+`npm install` → `npm run dev`
+
+---
+
+*Below is the official starter README from the challenge template.*
 
 # GSAP, Astro & Webflow Cloud
 
